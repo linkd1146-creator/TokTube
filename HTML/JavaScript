@@ -1,6 +1,9 @@
-<!doctype html>
-
-TokTube
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokTube</title>
 
 <style>
 body {
@@ -30,48 +33,18 @@ iframe {
   left:10px;
   color:white;
 }
-
-/* 🔥 UPGRADE ACTIONS */
 .actions {
   position:absolute;
-  right:12px;
-  bottom:160px;
+  right:10px;
+  bottom:100px;
   color:white;
   text-align:center;
 }
-
 .actions div {
-  margin:18px 0;
+  margin:15px 0;
   cursor:pointer;
-  font-size:28px;
-  background:rgba(0,0,0,0.5);
-  padding:12px;
-  border-radius:50%;
-  transition:all 0.2s ease;
-  box-shadow:0 0 10px rgba(255,255,255,0.2);
+  font-size:18px;
 }
-
-/* efek klik jedag jedug */
-.actions div:active {
-  transform:scale(1.4) rotate(8deg);
-  box-shadow:0 0 20px rgba(255,255,255,0.6);
-}
-
-/* hover modern */
-.actions div:hover {
-  transform:scale(1.15);
-  background:rgba(255,255,255,0.2);
-}
-
-/* label kecil */
-.actions div::after {
-  content: attr(data-label);
-  display:block;
-  font-size:10px;
-  opacity:0.7;
-  margin-top:4px;
-}
-
 .topbar {
   position:fixed;
   top:0;
@@ -85,8 +58,12 @@ iframe {
   background:none;
   border:none;
   padding:10px;
+  cursor:pointer;
 }
 </style>
+</head>
+
+<body>
 
 <div class="topbar">
   <button onclick="setCategory('trending')">🔥 Tren</button>
@@ -99,34 +76,21 @@ iframe {
 
 <div class="container" id="feed"></div>
 
-<!-- 🔥 FIREBASE -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDRbZaikbDC2GuWIfL7OWalXY81nvSd_DA",
-  authDomain: "minitok-bd7c1.firebaseapp.com",
-  projectId: "minitok-bd7c1",
-  storageBucket: "minitok-bd7c1.firebasestorage.app",
-  messagingSenderId: "507499794732",
-  appId: "1:507499794732:web:6f97c616d022e8beb79c89"
-};
-
-const app = initializeApp(firebaseConfig);
-</script>
-
-<!-- 🔥 APP SCRIPT -->
 <script>
-const API_KEY = "AIzaSyDpN_GFfGfnjlR6irFPhpXmnCznqs4c4Z0";
+// ================= CONFIG =================
+const API_KEY = "AIzaSyDrOlaKeTgOo9DWw01IzdgDgENHJaX2_DI";
 let nextPageToken = "";
 let currentQuery = "trending shorts";
 
+// Affiliate links
 const productLinks = [
+"https://s.blibli.com/GNtk/7dr918nl"
 "https://collshp.com/l0ver5",
-"https://s.blibli.com/GNtk/cc74cung",
-"https://www.amazon.com/dp/B0D6W3HYH9?th=1"
+"https://s.blibli.com/GNtk/hha5m7gv",
+"https://tiket.com/hotel/indonesia/the-langham-jakarta-511001669349468935"
 ];
 
+// ================= LOAD VIDEO =================
 async function loadVideos() {
   let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=6&q=${currentQuery}&key=${API_KEY}&pageToken=${nextPageToken}`;
   
@@ -134,15 +98,17 @@ async function loadVideos() {
   let data = await res.json();
   
   nextPageToken = data.nextPageToken;
+
   data.items.forEach(addVideo);
 }
 
 function addVideo(item){
   let id = item.id.videoId;
-  let randomProduct = productLinks[Math.floor(Math.random()*productLinks.length)];
 
   let box = document.createElement("div");
   box.className = "video-box";
+
+  let randomProduct = productLinks[Math.floor(Math.random()*productLinks.length)];
 
   box.innerHTML = `
     <iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=1"></iframe>
@@ -153,22 +119,23 @@ function addVideo(item){
     </div>
 
     <div class="actions">
-      <div onclick="goAds()" data-label="Like">❤️</div>
-      <div onclick="comment()" data-label="Komentar">💬</div>
-      <div onclick="share('${id}')" data-label="Share">🔗</div>
-      <div onclick="window.open('${randomProduct}')" data-label="Beli">🛒</div>
+      <div onclick="goAds()">❤️</div>
+      <div onclick="comment()">💬</div>
+      <div onclick="share('${id}')">🔗</div>
+      <div onclick="window.open('${randomProduct}')">🛒</div>
     </div>
   `;
 
   document.getElementById("feed").appendChild(box);
 }
 
+// ================= ACTION =================
 function goAds(){
   window.open("https://progressmagnify.com/z11qyhfr42?key=104549a6ff0bc9b735e5f1dcacc9f723");
 }
 
 function comment(){
-  alert("Komentar aktif (Firebase siap dipakai)");
+  alert("Komentar aktif (no coment)");
 }
 
 function share(id){
@@ -176,11 +143,12 @@ function share(id){
   window.open(`https://wa.me/?text=${link}`);
 }
 
+// ================= CATEGORY =================
 function setCategory(cat){
   document.getElementById("feed").innerHTML="";
   nextPageToken="";
   
-  const map = {
+  let map = {
     trending:"trending shorts",
     comedy:"funny video",
     anime:"anime edit",
@@ -193,6 +161,7 @@ function setCategory(cat){
   loadVideos();
 }
 
+// ================= INFINITE SCROLL =================
 const container = document.getElementById("feed");
 
 container.addEventListener("scroll",()=>{
@@ -201,21 +170,9 @@ container.addEventListener("scroll",()=>{
   }
 });
 
-/* 🔥 efek klik jedag jedug global */
-document.addEventListener("click", function(e){
-  if(e.target.closest(".actions div")){
-    e.target.animate([
-      { transform: "scale(1)" },
-      { transform: "scale(1.3)" },
-      { transform: "scale(1)" }
-    ], {
-      duration: 200,
-      easing: "ease"
-    });
-  }
-});
-
+// LOAD AWAL
 loadVideos();
 </script>
 
-</!doctype>
+</body>
+</html>
