@@ -1,6 +1,9 @@
-<!doctype html>
-
-TokTube
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokTube</title>
 
 <style>
 body {
@@ -31,7 +34,6 @@ iframe {
   color:white;
 }
 
-/* 🔥 UPGRADE ACTIONS */
 .actions {
   position:absolute;
   right:12px;
@@ -39,7 +41,6 @@ iframe {
   color:white;
   text-align:center;
 }
-
 .actions div {
   margin:18px 0;
   cursor:pointer;
@@ -50,20 +51,14 @@ iframe {
   transition:all 0.2s ease;
   box-shadow:0 0 10px rgba(255,255,255,0.2);
 }
-
-/* efek klik jedag jedug */
 .actions div:active {
   transform:scale(1.4) rotate(8deg);
   box-shadow:0 0 20px rgba(255,255,255,0.6);
 }
-
-/* hover modern */
 .actions div:hover {
   transform:scale(1.15);
   background:rgba(255,255,255,0.2);
 }
-
-/* label kecil */
 .actions div::after {
   content: attr(data-label);
   display:block;
@@ -79,6 +74,7 @@ iframe {
   display:flex;
   overflow-x:auto;
   background:rgba(0,0,0,0.6);
+  z-index:10;
 }
 .topbar button {
   color:white;
@@ -87,6 +83,9 @@ iframe {
   padding:10px;
 }
 </style>
+</head>
+
+<body>
 
 <div class="topbar">
   <button onclick="setCategory('trending')">🔥 Tren</button>
@@ -99,7 +98,6 @@ iframe {
 
 <div class="container" id="feed"></div>
 
-<!-- 🔥 FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 
@@ -112,10 +110,9 @@ const firebaseConfig = {
   appId: "1:507499794732:web:6f97c616d022e8beb79c89"
 };
 
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 </script>
 
-<!-- 🔥 APP SCRIPT -->
 <script>
 const API_KEY = "AIzaSyDpN_GFfGfnjlR6irFPhpXmnCznqs4c4Z0";
 let nextPageToken = "";
@@ -129,28 +126,28 @@ const productLinks = [
 "https://s.blibli.com/GNtk/06qiasxq",
 "https://s.blibli.com/GNtk/hha5m7gv",
 "https://s.blibli.com/GNtk/nxo0b1pd",
-"https://s.blibli.com/GNtk/kqhg4q2a"
-https://s.shopee.co.id/4fsj4TRNo6
-https://s.shopee.co.id/4qC9GmQkT9
-https://s.shopee.co.id/30kV5PXjBo
-https://s.shopee.co.id/3B3vHiX5qr
-https://s.shopee.co.id/2g7egnYzrm
-https://s.shopee.co.id/2qR4t6YMWp
-https://s.shopee.co.id/3g0BsdVBq0
-https://s.shopee.co.id/3qJc4wUYV3
-https://s.shopee.co.id/3LNLU1WSVy
-https://s.shopee.co.id/3VglgKVpB1
-https://s.shopee.co.id/7Aa434Hrjk
-https://s.shopee.co.id/70GdqlIV4j
-https://s.shopee.co.id/6pxDeSJ8Pi
-https://s.shopee.co.id/6fdnS9Jlkh];
+"https://s.blibli.com/GNtk/kqhg4q2a",
+"https://s.shopee.co.id/4fsj4TRNo6",
+"https://s.shopee.co.id/4qC9GmQkT9",
+"https://s.shopee.co.id/30kV5PXjBo",
+"https://s.shopee.co.id/3B3vHiX5qr",
+"https://s.shopee.co.id/2g7egnYzrm",
+"https://s.shopee.co.id/2qR4t6YMWp",
+"https://s.shopee.co.id/3g0BsdVBq0",
+"https://s.shopee.co.id/3qJc4wUYV3",
+"https://s.shopee.co.id/3LNLU1WSVy",
+"https://s.shopee.co.id/3VglgKVpB1",
+"https://s.shopee.co.id/7Aa434Hrjk",
+"https://s.shopee.co.id/70GdqlIV4j",
+"https://s.shopee.co.id/6pxDeSJ8Pi",
+"https://s.shopee.co.id/6fdnS9Jlkh"
+];
 
 async function loadVideos() {
   let url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=6&q=${currentQuery}&key=${API_KEY}&pageToken=${nextPageToken}`;
-  
   let res = await fetch(url);
   let data = await res.json();
-  
+
   nextPageToken = data.nextPageToken;
   data.items.forEach(addVideo);
 }
@@ -164,12 +161,10 @@ function addVideo(item){
 
   box.innerHTML = `
     <iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=1"></iframe>
-
     <div class="overlay">
       <h3>${item.snippet.channelTitle}</h3>
       <p>${item.snippet.title}</p>
     </div>
-
     <div class="actions">
       <div onclick="goAds()" data-label="Like">❤️</div>
       <div onclick="comment()" data-label="Komentar">💬</div>
@@ -197,7 +192,7 @@ function share(id){
 function setCategory(cat){
   document.getElementById("feed").innerHTML="";
   nextPageToken="";
-  
+
   const map = {
     trending:"trending shorts",
     comedy:"funny video",
@@ -219,7 +214,6 @@ container.addEventListener("scroll",()=>{
   }
 });
 
-/* 🔥 efek klik jedag jedug global */
 document.addEventListener("click", function(e){
   if(e.target.closest(".actions div")){
     e.target.animate([
@@ -236,4 +230,5 @@ document.addEventListener("click", function(e){
 loadVideos();
 </script>
 
-</!doctype>
+</body>
+</html>
