@@ -78,7 +78,7 @@ iframe {
 
 <script>
 // ================= CONFIG =================
-const API_KEY = "AIzaSyDrOlaKeTgOo9DWw01IzdgDgENHJaX2_DI";
+const API_KEY = "";
 let nextPageToken = "";
 let currentQuery = "trending shorts";
 
